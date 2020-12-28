@@ -24,8 +24,8 @@ V1 is the physical build with buttons that my dad is using right now.
  
 
 ## Schematic
-- [Schematic](schematic.png)
+- ![Schematic](schematic.png)
 
 ## Photos
-- [Top](Pi0AudioBook-top.jpg)
-- [Inside](Pi0AudioBook-inside.jpg)
+- ![Top](Pi0AudioBook-top.jpg)
+- ![Inside](Pi0AudioBook-inside.jpg)
