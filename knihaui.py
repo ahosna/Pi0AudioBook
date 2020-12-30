@@ -13,13 +13,17 @@ BTN_NEXT=11
 BOUNCE_TIME=None
 HOLD_TIME=1.0
 
-RADIO="http://live.slovakradio.sk:8000/Slovensko_128.mp3"
+RADIOS=[
+    "http://live.slovakradio.sk:8000/Slovensko_128.mp3",
+    "http://live.slovakradio.sk:8000/Litera_128.mp3",
+]
 
 held_btn_play = False
 held_btn_prev = False
 held_btn_next = False
 is_radio_mode = False
 song_position = 0
+radio_position = 0
 
 client = MPDClient()
 
@@ -70,7 +74,7 @@ def play_held(btn):
             song_position = int(status["song"])
         #switch to radio mode
         is_radio_mode=True
-        setup_radio()
+        setup_radio(0)
 
     held_btn_play = True
 
@@ -88,10 +92,12 @@ def next_released():
     global held_btn_next
     if not held_btn_next:
         print(">> released")
-        if is_radio_mode:
-            return 
         with mpd_client() as mpd:
-            mpd.next()
+            if is_radio_mode:
+                radio_position = (radio_position + 1) % len(RADIOS)
+                setup_radio(radio_position)
+            else:
+                mpd.next()
     held_btn_next = False
 
 def play_released():
@@ -129,14 +135,14 @@ def setup_player(song_position=0):
             mpd.add(f)
         mpd.play(song_position)
 
-def setup_radio():
+def setup_radio(radio_position=0):
     with mpd_client() as mpd:
         mpd.clear()
-        mpd.add(RADIO)
+        mpd.add(RADIOS[radio_position])
         mpd.play()
 
 setup_buttons()
-setup_radio()
+setup_radio(radio_position)
 
 while(True):
     sleep(1)

@@ -3,7 +3,7 @@
 SEGMENT_TIME=600
 TITLES_DIR=~/code/Pi0AudioBook/chapters
 
-if [ "$1" == "" ] || [ "$1" == "--help" ] || [ "$1" == "-h"]; then
+if [ "$1" == "" ] || [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
     echo "Usage: <output_directory> <input_file 1> [input_file 2] [...]"
     echo "Use input files to produce audio chapters with names 0001.mp3, 0002.mp3, ..."
     echo "in the output directory. Output_directory is created at the startup."
@@ -12,7 +12,7 @@ if [ "$1" == "" ] || [ "$1" == "--help" ] || [ "$1" == "-h"]; then
     exit 1
 fi 
 
-ffnmpeg --help > /dev/null 2>&1 
+ffmpeg --help > /dev/null 2>&1 
 if [$? -ne 0]; then
     echo "You need ffmpeg with LAME plugins to use this script"
     exit 1
