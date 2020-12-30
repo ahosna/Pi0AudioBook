@@ -13,9 +13,13 @@ BTN_NEXT=11
 BOUNCE_TIME=None
 HOLD_TIME=1.0
 
+RADIO="http://live.slovakradio.sk:8000/Slovensko_128.mp3"
+
 held_btn_play = False
 held_btn_prev = False
 held_btn_next = False
+is_radio_mode = False
+song_position = 0
 
 client = MPDClient()
 
@@ -32,6 +36,8 @@ def mpd_client():
 def prev_held():
     global held_btn_prev
     print("<< held")
+    if is_radio_mode:
+        return 
     with mpd_client() as mpd:
         mpd.play(0)
     held_btn_prev = True
@@ -39,6 +45,8 @@ def prev_held():
 def next_held():
     global held_btn_next
     print(">> held")
+    if is_radio_mode:
+        return 
     with mpd_client() as mpd:
         status = mpd.status()
         pos = int(status["song"]) + 10
@@ -49,13 +57,29 @@ def next_held():
 
 def play_held(btn):
     global held_btn_play
+    global is_radio_mode
+    global song_position
     print("|| held")
+    if is_radio_mode:
+        # switch to player mode
+        is_radio_mode=False
+        setup_player(song_position)
+    else:
+        with mpd_client() as mpd:
+            status = mpd.status()
+            song_position = int(status["song"])
+        #switch to radio mode
+        is_radio_mode=True
+        setup_radio()
+
     held_btn_play = True
 
 def prev_released():
     global held_btn_prev
     if not held_btn_prev:
         print("<< released")
+        if is_radio_mode:
+            return 
         with mpd_client() as mpd:
             mpd.previous()
     held_btn_prev = False
@@ -64,6 +88,8 @@ def next_released():
     global held_btn_next
     if not held_btn_next:
         print(">> released")
+        if is_radio_mode:
+            return 
         with mpd_client() as mpd:
             mpd.next()
     held_btn_next = False
@@ -92,7 +118,7 @@ def setup_buttons():
     btn_play.when_released = play_released
     btn_play.when_held = play_held
 
-def setup_client():
+def setup_player(song_position=0):
     with mpd_client() as mpd:
         mpd.update()
         mpd.repeat(1)
@@ -101,10 +127,16 @@ def setup_client():
         files = sorted(f for f in os.listdir(DATA_DIR) if f.endswith(".mp3"))
         for f in files:
             mpd.add(f)
-        mpd.play(0)
+        mpd.play(song_position)
+
+def setup_radio():
+    with mpd_client() as mpd:
+        mpd.clear()
+        mpd.add(RADIO)
+        mpd.play()
 
 setup_buttons()
-setup_client()
+setup_radio()
 
 while(True):
     sleep(1)
