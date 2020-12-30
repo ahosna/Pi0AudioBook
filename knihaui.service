@@ -1,0 +1,13 @@
+[Unit]
+Description=Run UI for reader
+After=mpd
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/pi/knihaui/knihaui.py
+Restart=always
+User=pi
+RestartSec=1
+
+[Install]
+WantedBy=multi-user.target

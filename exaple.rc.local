@@ -1,0 +1,7 @@
+/usr/bin/tvservice -o
+/usr/bin/amixer sset 'PCM' '100%'
+/usr/bin/gpio mode 5 out
+/usr/bin/gpio mode 12 in
+/usr/bin/gpio mode 13 in
+/usr/bin/gpio mode 14 in
+/usr/bin/gpio write 5 0
