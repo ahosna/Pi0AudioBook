@@ -60,7 +60,7 @@ def next_held():
         if pos > int(status["playlistlength"]): 
             pos = 0
         mpd.play(pos)
-    state.eld_btn_next = True
+    state.held_btn_next = True
 
 def play_held(btn):
     global state
@@ -139,7 +139,8 @@ def setup_player(song_position=0):
         files = sorted(f for f in os.listdir(DATA_DIR) if f.endswith(".mp3"))
         for f in files:
             mpd.add(f)
-        mpd.play(state.song_position)
+        mpd.play(song_position)
+    state.song_position = song_position
 
 def setup_radio(radio_position=0):
     global state
@@ -147,9 +148,10 @@ def setup_radio(radio_position=0):
         mpd.clear()
         mpd.add(RADIOS[radio_position])
         mpd.play()
+    state.radio_position = radio_position
 
 setup_buttons()
-setup_radio(state.radio_position)
+setup_radio()
 
 while(True):
     sleep(1)
