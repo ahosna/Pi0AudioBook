@@ -18,19 +18,22 @@ RADIOS=[
     "http://live.slovakradio.sk:8000/Litera_128.mp3",
 ]
 
-held_btn_play = False
-held_btn_prev = False
-held_btn_next = False
-is_radio_mode = False
-song_position = 0
-radio_position = 0
 
-client = MPDClient()
+class State:
+    held_btn_play= False
+    held_btn_prev= False
+    held_btn_next= False
+    is_radio_mode= True
+    song_position = 0
+    radio_position = 0
+
+state = State()
 
 @contextmanager
 def mpd_client():
-    global client
+    global state
     try:
+        client = MPDClient()
         client.connect("127.0.0.1", 6600)
         yield client
     finally:
@@ -38,18 +41,18 @@ def mpd_client():
         client.disconnect()
 
 def prev_held():
-    global held_btn_prev
+    global state
     print("<< held")
-    if is_radio_mode:
+    if state.is_radio_mode:
         return 
     with mpd_client() as mpd:
         mpd.play(0)
-    held_btn_prev = True
+    state.held_btn_prev = True
 
 def next_held():
-    global held_btn_next
+    global state
     print(">> held")
-    if is_radio_mode:
+    if state.is_radio_mode:
         return 
     with mpd_client() as mpd:
         status = mpd.status()
@@ -57,56 +60,58 @@ def next_held():
         if pos > int(status["playlistlength"]): 
             pos = 0
         mpd.play(pos)
-    held_btn_next = True
+    state.eld_btn_next = True
 
 def play_held(btn):
-    global held_btn_play
-    global is_radio_mode
-    global song_position
+    global state
     print("|| held")
-    if is_radio_mode:
+    if state.is_radio_mode:
         # switch to player mode
-        is_radio_mode=False
-        setup_player(song_position)
+        state.is_radio_mode=False
+        setup_player(state.song_position)
     else:
+        #switch to radio mode
         with mpd_client() as mpd:
             status = mpd.status()
-            song_position = int(status["song"])
-        #switch to radio mode
-        is_radio_mode=True
+            state.song_position = int(status["song"])
+        state.is_radio_mode=True
         setup_radio(0)
 
-    held_btn_play = True
+    state.held_btn_play = True
 
 def prev_released():
-    global held_btn_prev
-    if not held_btn_prev:
+    global state
+    if not state.held_btn_prev:
         print("<< released")
-        if is_radio_mode:
+        if state.is_radio_mode:
+            state.radio_position -= 1
+            if state.radio_position < 0:
+                state.radio_position = len(RADIOS)-1
+            setup_radio(state.radio_position)
             return 
         with mpd_client() as mpd:
             mpd.previous()
-    held_btn_prev = False
+    state.held_btn_prev = False
 
 def next_released():
-    global held_btn_next
-    if not held_btn_next:
+    global state
+    if not state.held_btn_next:
         print(">> released")
-        with mpd_client() as mpd:
-            if is_radio_mode:
-                radio_position = (radio_position + 1) % len(RADIOS)
-                setup_radio(radio_position)
-            else:
+        if state.is_radio_mode:
+            state.radio_position = (state.radio_position + 1) % len(RADIOS)
+            setup_radio(state.radio_position)
+        else:
+            with mpd_client() as mpd:
                 mpd.next()
-    held_btn_next = False
+    state.held_btn_next = False
 
 def play_released():
-    global held_btn_play
-    if not held_btn_play:
+    global state
+    if not state.held_btn_play:
         print("|| released")
         with mpd_client() as mpd:
             mpd.pause()
-    held_btn_play = False
+    state.held_btn_play = False
 
 def setup_buttons():
     global btn_next
@@ -125,6 +130,7 @@ def setup_buttons():
     btn_play.when_held = play_held
 
 def setup_player(song_position=0):
+    global state
     with mpd_client() as mpd:
         mpd.update()
         mpd.repeat(1)
@@ -133,16 +139,17 @@ def setup_player(song_position=0):
         files = sorted(f for f in os.listdir(DATA_DIR) if f.endswith(".mp3"))
         for f in files:
             mpd.add(f)
-        mpd.play(song_position)
+        mpd.play(state.song_position)
 
 def setup_radio(radio_position=0):
+    global state
     with mpd_client() as mpd:
         mpd.clear()
         mpd.add(RADIOS[radio_position])
         mpd.play()
 
 setup_buttons()
-setup_radio(radio_position)
+setup_radio(state.radio_position)
 
 while(True):
     sleep(1)
