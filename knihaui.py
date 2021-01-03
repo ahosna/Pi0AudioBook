@@ -34,7 +34,7 @@ def mpd_client():
     global state
     try:
         client = MPDClient()
-        client.connect("::1", 6600)
+        client.connect("127.0.0.1", 6600)
         yield client
     finally:
         client.close()
@@ -154,4 +154,4 @@ setup_buttons()
 setup_radio()
 
 while(True):
-    sleep(0.1)
+    sleep(1)

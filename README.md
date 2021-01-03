@@ -11,7 +11,7 @@ My dad is practically blind and at 80 years has trouble hearing and operating ti
 
 ## Install
 User pi on PI0W has this repo checked out under knihaui folder. There is folder /data on the root writable by pi user. 
-/etc/rc.local is modified to disable video output, set PCM volume to 100% and set IO pins
+/etc/rc.local is modified to disable video output, set PCM volume to 100, set IO pins and set permissions
 /etc/systemd/system/knihaui.service takes care of running the UI
 Service is enabled with systemctl enable knihaui. 
 MPD is installed and enabled on the system running on port 6600 and using /data for media directory.
@@ -25,12 +25,16 @@ V1 is the physical build with buttons that my dad is using right now.
 - [x] Build hardware using Pi zero W
 - [x] PY UI that drives the buttons and controlls MPD
 - [x] Test remotre upgrade capability - SSH
-- [x] Had to ad hoc add support for internet radios (SRo and Radio Litera)
-- [x] Add system modification of raspbian to this doc
+- [x] Add support for internet radios (SRo and Radio Litera)
+- [x] Add doc of system modification of raspbian to this doc
+
 ## V2
-- [ ] Replace potentiometer with rotary encoder and set master volume directly using Alsa
-- [ ] Add rocker switch with indicator to the side to allow turn off/on and immediate powered-on indication
- 
+- [ ] HW: Add serial port output to external connector for improved troubleshooting 
+- [ ] HW: Replace potentiometer with rotary encoder and set master volume directly using Alsa
+- [ ] HW: Add rocker switch with indicator to the side to allow turn off/on and immediate powered-on indication
+- [ ] OS: Serial console
+- [ ] SW: rotary switch volume control
+- [ ] OS: read-only mount mode to prolong SD card lifetime
 
 ## Schematic
 - ![Schematic](schematic.png)
