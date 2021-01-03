@@ -1,6 +1,7 @@
 [Unit]
 Description=Run UI for reader
-After=mpd
+Requires=mpd.service network-online.target
+After=mpd.service
 
 [Service]
 Type=simple

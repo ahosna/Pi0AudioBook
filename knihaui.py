@@ -34,7 +34,7 @@ def mpd_client():
     global state
     try:
         client = MPDClient()
-        client.connect("127.0.0.1", 6600)
+        client.connect("::1", 6600)
         yield client
     finally:
         client.close()
@@ -138,7 +138,6 @@ def setup_player(song_position=0):
         mpd.clear()
         files = sorted(f for f in os.listdir(DATA_DIR) if f.endswith(".mp3"))
         for f in files:
-            print(f)
             mpd.add(f)
         mpd.play(song_position)
     state.song_position = song_position
@@ -155,4 +154,4 @@ setup_buttons()
 setup_radio()
 
 while(True):
-    sleep(1)
+    sleep(0.1)
