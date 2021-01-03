@@ -138,6 +138,7 @@ def setup_player(song_position=0):
         mpd.clear()
         files = sorted(f for f in os.listdir(DATA_DIR) if f.endswith(".mp3"))
         for f in files:
+            print(f)
             mpd.add(f)
         mpd.play(song_position)
     state.song_position = song_position
@@ -147,7 +148,7 @@ def setup_radio(radio_position=0):
     with mpd_client() as mpd:
         mpd.clear()
         mpd.add(RADIOS[radio_position])
-        mpd.play()
+        mpd.play(0)
     state.radio_position = radio_position
 
 setup_buttons()
