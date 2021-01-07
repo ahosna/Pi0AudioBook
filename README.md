@@ -17,6 +17,8 @@ Service is enabled with systemctl enable knihaui.
 MPD is installed and enabled on the system running on port 6600 and using /data for media directory.
 Unused or extra components are disabled. We keep avahi for name discovery.
 
+Download https://github.com/ghollingworth/overlayfs and use as per instructions in readme.
+
 ## V0
 V0 was the set of scripts to slice larger audio books into manageable small files suitable for dumb players. This also allowed to prepend "chapter X" voice at the start of each slice.
 
@@ -31,10 +33,10 @@ V1 is the physical build with buttons that my dad is using right now.
 ## V2
 - [ ] HW: Add serial port output to external connector for improved troubleshooting 
 - [ ] HW: Replace potentiometer with rotary encoder and set master volume directly using Alsa
-- [ ] HW: Add rocker switch with indicator to the side to allow turn off/on and immediate powered-on indication
+- [ ] HW: Add rocker switch with indicator to allow turn off/on and immediate powered-on indication
 - [ ] OS: Serial console
 - [ ] SW: rotary switch volume control
-- [ ] OS: read-only mount mode to prolong SD card lifetime
+- [x] OS: read-only mount mode to prolong SD card lifetime
 
 ## Schematic
 - ![Schematic](schematic.png)
