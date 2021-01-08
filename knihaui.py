@@ -156,7 +156,8 @@ setup_buttons()
 setup_radio()
 
 while(True):
-    with mpd_client() as mpd:
-        status = mpd.status()
-        print("elapsed: {}".format(status.get("elapsed", "None")))
+    # it looks like when stream looses connectivity elapsed stops
+    #with mpd_client() as mpd:
+    #    status = mpd.status()
+    #    print("elapsed: {}".format(status.get("elapsed", "None")))
     sleep(1)
