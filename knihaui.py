@@ -146,6 +146,8 @@ def setup_radio(radio_position=0):
     global state
     with mpd_client() as mpd:
         mpd.clear()
+        mpd.repeat(1) # in an attempt to auto-recover the stream
+        mpd.single(1)
         mpd.add(RADIOS[radio_position])
         mpd.play(0)
     state.radio_position = radio_position
@@ -154,4 +156,7 @@ setup_buttons()
 setup_radio()
 
 while(True):
+    with mpd_client() as mpd:
+        status = mpd.status()
+        print("elapsed: {}".format(status.get("elapsed", "None")))
     sleep(1)
