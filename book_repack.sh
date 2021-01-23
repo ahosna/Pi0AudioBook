@@ -13,7 +13,7 @@ if [ "$1" == "" ] || [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
 fi 
 
 ffmpeg --help > /dev/null 2>&1 
-if [$? -ne 0]; then
+if [ $? -ne 0 ]; then
     echo "You need ffmpeg with LAME plugins to use this script"
     exit 1
 fi
