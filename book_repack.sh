@@ -30,7 +30,7 @@ for f in "$@"; do
     split_dir=$(printf "%s/%04d" "$main_dir" $c)
     mkdir -p "$split_dir"
     # -q:a 6 is vbr ~ 128
-    ffmpeg -i "$f" -f segment -segment_time $SEGMENT_TIME -q:a 6 "$split_dir/%04d.mp3"
+    ffmpeg -vn -i "$f" -f segment -segment_time $SEGMENT_TIME -q:a 6 "$split_dir/%04d.mp3"
     c=$((c+1))
 done
 
@@ -39,7 +39,7 @@ d=1;
 for chap in $chapters; do 
     output=$(printf "%s/%04d.mp3" "$main_dir" $d) 
     title=$(printf "%s/%04d.mp3" "$TITLES_DIR" $d)
-    ffmpeg -i "$title" -i "$chap" -filter_complex '[0:0][1:0]concat=n=2:v=0:a=1[out]' -map '[out]' "$output"
+    ffmpeg -vn -i "$title" -i "$chap" -filter_complex '[0:0][1:0]concat=n=2:v=0:a=1[out]' -map '[out]' "$output"
     d=$((d+1))
 done
 
