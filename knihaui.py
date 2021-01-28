@@ -139,6 +139,7 @@ def setup_player(song_position=0, play=True):
         files = sorted(f for f in os.listdir(DATA_DIR) if f.endswith(".mp3"))
         for f in files:
             mpd.add(f)
+        print("Added: {} files".format(len(files)))
         mpd.play(song_position)
     state.song_position = song_position
 
