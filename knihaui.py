@@ -129,7 +129,7 @@ def setup_buttons():
     btn_play.when_released = play_released
     btn_play.when_held = play_held
 
-def setup_player(song_position=0):
+def setup_player(song_position=0, play=True):
     global state
     with mpd_client() as mpd:
         mpd.update()
@@ -153,6 +153,7 @@ def setup_radio(radio_position=0):
     state.radio_position = radio_position
 
 setup_buttons()
+setup_player(play=False)
 setup_radio()
 
 while(True):
