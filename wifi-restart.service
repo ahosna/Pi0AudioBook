@@ -1,0 +1,13 @@
+[Unit]
+Description=Keep pinging router and ifdown/ifup if it's down
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/home/pi/knihaui/wifi_restart.sh
+TimeoutStartSec=30
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
