@@ -20,6 +20,18 @@ Unused or extra components are disabled. We keep avahi for name discovery.
 
 Download https://github.com/ghollingworth/overlayfs and use as per instructions in readme.
 
+### newsgen.py
+* initialize venv with `python3 -mvenv env1`
+* activate env with `source env/bin/activate`
+* pip3 install google-cloud-texttospeech
+* download project certificate from google cloud to env/newsgen-credentials.json`
+To run:
+* `export GOOGLE_APPLICATION_CREDENTIALS=env/newsgen-credentials.json`
+* `source env/bin/activate`
+* Running `python3 newsgen.py` creates `/tmp/news.mp3` if successful
+Automate with crontab.
+
+
 ## V0
 V0 was the set of scripts to slice larger audio books into manageable small files suitable for dumb players. This also allowed to prepend "chapter X" voice at the start of each slice.
 
@@ -37,6 +49,7 @@ V1 is the physical build with buttons that my dad is using right now.
 - [ ] HW: Add rocker switch with indicator to allow turn off/on and immediate powered-on indication
 - [ ] OS: Serial console
 - [ ] SW: rotary switch volume control
+- [x] SW: user request to have information about the day available as another station
 - [x] OS: read-only mount mode to prolong SD card lifetime
 
 ## Schematic
