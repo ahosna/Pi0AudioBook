@@ -16,7 +16,7 @@ MONTHS = [
     None, "Januára", "Februára", "Marca", "Apríla", "Mája", "Júna", 
     "Júla", "Augusta", "Septembra", "Októbra", "Novembra", "Decembra"
 ]
-WEEKDAYS = ["Nedeľa", "Pondelok", "Utorok", "Streda", "Štvrtok", "Piatok", "Sobota"]
+WEEKDAYS = ["Pondelok", "Utorok", "Streda", "Štvrtok", "Piatok", "Sobota", "Nedeľa"]
 
 
 def news_file(temp=False):
