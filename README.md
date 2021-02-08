@@ -21,7 +21,7 @@ Unused or extra components are disabled. We keep avahi for name discovery.
 Download https://github.com/ghollingworth/overlayfs and use as per instructions in readme.
 
 ### newsgen.py
-* initialize venv with `python3 -mvenv env1`
+* initialize venv with `python3 -mvenv env`
 * activate env with `source env/bin/activate`
 * pip3 install google-cloud-texttospeech
 * download project certificate from google cloud to env/newsgen-credentials.json`
