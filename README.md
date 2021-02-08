@@ -10,15 +10,16 @@ My dad is practically blind and at 80 years has trouble hearing and operating ti
 - sufficient output volume to drive speakers/headphones
 
 ## Install
-User pi on PI0W has this repo checked out under knihaui folder. There is folder /data on the root writable by pi user. 
-/etc/rc.local is modified to disable video output, set PCM volume to 100, set IO pins and set permissions
-Also we can add wifi_restarh.sh & to automatically try to restart wifi if it stops pinging the router.
-/etc/systemd/system/knihaui.service takes care of running the UI
-Service is enabled with systemctl enable knihaui. 
-MPD is installed and enabled on the system running on port 6600 and using /data for media directory.
-Unused or extra components are disabled. We keep avahi for name discovery.
-
-Download https://github.com/ghollingworth/overlayfs and use as per instructions in readme.
+### knihaui.py
+* User pi on Raspberry PI Zero has this repo checked out under knihaui folder.
+* There is also folder `/data` on the root writable by pi user. 
+* `/etc/rc.local` is modified to disable video output, set PCM volume to 100, set IO pins and set permissions on `/data`
+* We have `wifi_restart.sh` and related service definition to automatically ping and restart wifi.
+* `/etc/systemd/system/knihaui.service` takes care of running the UI.
+* Service is enabled with `systemctl enable knihaui`. 
+* MPD is installed and enabled on the system running on port 6600 and using `/data` for media directory.
+* Unused or extra components are disabled. We keep avahi for name discovery.
+* To prolong SD card lifetime download [overlayfs](https://github.com/ghollingworth/overlayfs) and use as per instructions in readme.
 
 ### newsgen.py
 * initialize venv with `python3 -mvenv env`
