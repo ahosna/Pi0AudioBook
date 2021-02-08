@@ -29,6 +29,8 @@ To run:
 * `export GOOGLE_APPLICATION_CREDENTIALS=env/newsgen-credentials.json`
 * `source env/bin/activate`
 * Running `python3 newsgen.py` creates `/tmp/news.mp3` if successful
+
+Listet to [Example brief in Slovak here](example_brief_sk.mp3)
 Automate with crontab.
 
 
