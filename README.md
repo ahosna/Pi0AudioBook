@@ -30,7 +30,7 @@ To run:
 * `source env/bin/activate`
 * Running `python3 newsgen.py` creates `/tmp/news.mp3` if successful
 
-Listen to ![Example brief in Slovak here](example_brief_sk.mp3)
+Listen to [Example brief in Slovak here](example_brief_sk.mp3)
 
 Automate with crontab.
 
