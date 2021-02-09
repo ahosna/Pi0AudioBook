@@ -252,6 +252,5 @@ def main(dev=False):
 
 
 if __name__ == "__main__":
-    print(sys.argv)
     dev = len(sys.argv) > 1 and sys.argv[1] == "--dev"
     main(dev=dev)
