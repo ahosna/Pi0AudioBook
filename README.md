@@ -10,6 +10,17 @@ My dad is practically blind and at 80 years has trouble hearing and operating ti
 - sufficient output volume to drive speakers/headphones
 
 ## Install
+### Dependencie
+Use venv for managing dependencies
+```
+python3 -mvenv env
+activate env with `source env/bin/activate`
+pip3 install gpiozero
+pip3 install python-mpd2
+pip3 install google-cloud-texttospeech
+
+```
+
 ### knihaui.py
 * User pi on Raspberry PI Zero has this repo checked out under knihaui folder.
 * There is also folder `/data` on the root writable by pi user. 
@@ -22,9 +33,6 @@ My dad is practically blind and at 80 years has trouble hearing and operating ti
 * To prolong SD card lifetime download [overlayfs](https://github.com/ghollingworth/overlayfs) and use as per instructions in readme.
 
 ### newsgen.py
-* initialize venv with `python3 -mvenv env`
-* activate env with `source env/bin/activate`
-* pip3 install google-cloud-texttospeech
 * download project certificate from google cloud to env/newsgen-credentials.json`
 To run:
 * `export GOOGLE_APPLICATION_CREDENTIALS=env/newsgen-credentials.json`

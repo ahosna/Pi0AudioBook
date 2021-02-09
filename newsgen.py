@@ -7,24 +7,35 @@ import urllib.request
 from google.cloud import texttospeech
 
 
-SK_FORECAST_URL='http://www.shmu.sk/sk/?page=1&id=meteo_tpredpoved_ba'
+SK_FORECAST_URL = "http://www.shmu.sk/sk/?page=1&id=meteo_tpredpoved_ba"
 FAILED_FORECAST = "Nepodarilo sa stiahnuť predpoveď počasia."
 EXTRACT_REGEX = re.compile(r".*(<h3[^>]*>(Predpove(.*?))</h3>(.*?)</p>).*")
 CLEANUP_REGEX = re.compile(r"<.[^>]*>")
 
 MONTHS = [
-    None, "Januára", "Februára", "Marca", "Apríla", "Mája", "Júna", 
-    "Júla", "Augusta", "Septembra", "Októbra", "Novembra", "Decembra"
+    None,
+    "Januára",
+    "Februára",
+    "Marca",
+    "Apríla",
+    "Mája",
+    "Júna",
+    "Júla",
+    "Augusta",
+    "Septembra",
+    "Októbra",
+    "Novembra",
+    "Decembra",
 ]
 WEEKDAYS = ["Pondelok", "Utorok", "Streda", "Štvrtok", "Piatok", "Sobota", "Nedeľa"]
 
 
 def news_file(temp=False):
-    return "/tmp/{}news.mp3".format("." if temp else "")
+    return "/data/{}news.mp3".format(".new-" if temp else ".")
 
 
 def get_sk_forecast():
-    try: 
+    try:
         resp = urllib.request.urlopen(SK_FORECAST_URL)
         if resp.code != 200:
             raise RuntimeError("Response code not 200")
@@ -32,16 +43,17 @@ def get_sk_forecast():
         text = text.replace("\r", "")
         text = text.replace("\n", "")
         match = EXTRACT_REGEX.match(text)
-    
+
         if not match:
             raise RuntimeError("Failed to parse forecast")
-        
+
         head = match.group(2)
         text = CLEANUP_REGEX.sub("", match.group(4), 0)
-        return list(map(
-            str.strip,
-            [ head, *["{}.".format(l) for l in text.split(".") if len(l)]]
-        ))
+        return list(
+            map(
+                str.strip, [head, *["{}.".format(l) for l in text.split(".") if len(l)]]
+            )
+        )
     except Exception as e:
         logging.exception(e)
         return FAILED_FORECAST
@@ -52,7 +64,7 @@ def wrap_in_p(lines):
 
 
 def get_meniny_sk(day, month):
-    try: 
+    try:
         with open("meniny.json") as f:
             meniny = json.load(f)
             return meniny[str(month)][str(day)]
@@ -64,34 +76,36 @@ def get_meniny_sk(day, month):
 def get_sk_date_and_name():
 
     today = datetime.date.today()
-    dnes = "Dnes je {} - {}. {} {}".format(WEEKDAYS[today.weekday()], today.day, MONTHS[today.month], today.year)
+    dnes = "Dnes je {} - {}. {} {}".format(
+        WEEKDAYS[today.weekday()], today.day, MONTHS[today.month], today.year
+    )
 
     meniny_txt = ""
     meniny_today = get_meniny_sk(today.month, today.day)
-    if meniny_today: 
+    if meniny_today:
         meniny_txt = "Meniny má {}".format(meniny_today)
 
     tomorrow = today + datetime.timedelta(days=1)
     meniny_tomorrow = get_meniny_sk(tomorrow.month, tomorrow.day)
-    if meniny_tomorrow: 
+    if meniny_tomorrow:
         if meniny_today:
             meniny_txt += ". Zajtra {}".format(meniny_tomorrow)
-        else: 
+        else:
             meniny_txt = "Zajtra má meniny {}".format(meniny_tomorrow)
     meniny_txt += "."
-    
-    return [dnes, meniny_txt] 
 
-   
+    return [dnes, meniny_txt]
+
+
 def build_ssml():
     ssml = (
-        "<speak>" +
-        "".join(wrap_in_p(get_sk_date_and_name() + get_sk_forecast())) +
-        "</speak>"
+        "<speak>"
+        + "".join(wrap_in_p(get_sk_date_and_name() + get_sk_forecast()))
+        + "</speak>"
     )
     return ssml
 
-    
+
 def prepare_news_file():
     logging.info("Calling google API")
     try:
@@ -114,13 +128,14 @@ def prepare_news_file():
         )
 
         with open(news_file(temp=True), "wb") as out:
-            # Write the response to the output file.
             out.write(response.audio_content)
-            logging.info('Audio content written to file "output.mp3"')
-            
+            logging.info("Audio content written to file")
+
         os.rename(news_file(temp=True), news_file(temp=False))
     except Exception as e:
         logging.exception(e)
-    
 
-prepare_news_file()
+
+if __name__ == "__main__":
+    loging.basicConfig(level=logging.DEBUG)
+    prepare_news_file()
