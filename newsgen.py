@@ -31,7 +31,7 @@ WEEKDAYS = ["Pondelok", "Utorok", "Streda", "Štvrtok", "Piatok", "Sobota", "Ned
 
 
 def news_file(temp=False):
-    return "/data/{}news.mp3".format(".new-" if temp else ".")
+    return "/tmp/{}news.mp3".format(".new-" if temp else ".")
 
 
 def get_sk_forecast():
