@@ -5,7 +5,7 @@ After=mpd.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /home/pi/knihaui/knihaui.py
+ExecStart=/home/pi/knihaui/knihaui.sh
 Restart=always
 User=pi
 RestartSec=5

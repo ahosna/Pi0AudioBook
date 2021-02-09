@@ -137,5 +137,6 @@ def prepare_news_file():
 
 
 if __name__ == "__main__":
-    loging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG)
+    #print(build_ssml())
     prepare_news_file()

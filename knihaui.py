@@ -201,7 +201,11 @@ def setup_radio():
         mpd.repeat(1)  # in an attempt to auto-recover the stream
         mpd.single(1)
         for r in RADIOS:
-            mpd.add(r)
+            try: 
+                mpd.add(r)
+            except Exception as e:
+                logging.exception(e)
+
         safe_call(mpd, mpd.play, 0)
 
 
