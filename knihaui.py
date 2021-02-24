@@ -231,7 +231,7 @@ def process_direct_command(cmd):
 
 
 def main(dev=False):
-    logging.basicConfig(level=logging.DEBUG if dev else logging.WARN)
+    logging.basicConfig(level=logging.DEBUG if dev else logging.INFO)
 
     setup_mpd(dev=dev)
     setup_buttons(dev=dev)
