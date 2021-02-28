@@ -19,8 +19,10 @@ HOLD_TIME = 1.0
 
 RADIOS = [
     ".news.mp3",
-    "http://live.slovakradio.sk:8000/Slovensko_128.mp3",
-    "http://live.slovakradio.sk:8000/Litera_128.mp3",
+    #"http://live.slovakradio.sk:8000/Slovensko_128.mp3",
+    "https://icecast.stv.livebox.sk/slovensko_128.mp3",
+    #"http://live.slovakradio.sk:8000/Litera_128.mp3",
+    "https://icecast.stv.livebox.sk/litera_128.mp3",
 ]
 
 
