@@ -63,7 +63,7 @@ def wrap_in_p(lines):
     return ["<p>{}</p>".format(l) for l in lines]
 
 
-def get_meniny_sk(day, month):
+def get_meniny_sk(month, day):
     try:
         with open("meniny.json") as f:
             meniny = json.load(f)
@@ -89,10 +89,9 @@ def get_sk_date_and_name():
     meniny_tomorrow = get_meniny_sk(tomorrow.month, tomorrow.day)
     if meniny_tomorrow:
         if meniny_today:
-            meniny_txt += ". Zajtra {}".format(meniny_tomorrow)
+            meniny_txt += ". Zajtra {}.".format(meniny_tomorrow)
         else:
-            meniny_txt = "Zajtra má meniny {}".format(meniny_tomorrow)
-    meniny_txt += "."
+            meniny_txt = "Zajtra má meniny {}.".format(meniny_tomorrow)
 
     return [dnes, meniny_txt]
 
@@ -103,6 +102,7 @@ def build_ssml():
         + "".join(wrap_in_p(get_sk_date_and_name() + get_sk_forecast()))
         + "</speak>"
     )
+    logging.info("SSML: %s", ssml)
     return ssml
 
 

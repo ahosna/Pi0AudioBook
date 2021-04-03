@@ -19,8 +19,10 @@ HOLD_TIME = 1.0
 
 RADIOS = [
     ".news.mp3",
-    "http://live.slovakradio.sk:8000/Slovensko_128.mp3",
-    "http://live.slovakradio.sk:8000/Litera_128.mp3",
+    #"http://live.slovakradio.sk:8000/Slovensko_128.mp3",
+    "https://icecast.stv.livebox.sk/slovensko_128.mp3",
+    #"http://live.slovakradio.sk:8000/Litera_128.mp3",
+    "https://icecast.stv.livebox.sk/litera_128.mp3",
 ]
 
 
@@ -231,7 +233,7 @@ def process_direct_command(cmd):
 
 
 def main(dev=False):
-    logging.basicConfig(level=logging.DEBUG if dev else logging.WARN)
+    logging.basicConfig(level=logging.DEBUG if dev else logging.INFO)
 
     setup_mpd(dev=dev)
     setup_buttons(dev=dev)
