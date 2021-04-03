@@ -76,7 +76,7 @@ def get_meniny_sk(day, month):
 def get_sk_date_and_name():
 
     today = datetime.date.today()
-    dnes = "Dnes je {} - {}. {} {}".format(
+    dnes = "Dnes je {} - {} {} {}".format(
         WEEKDAYS[today.weekday()], today.day, MONTHS[today.month], today.year
     )
 
