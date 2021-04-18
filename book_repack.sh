@@ -43,7 +43,7 @@ for chap in $chapters; do
     d=$((d+1))
 done
 
-find "$main_dir" -type d -depth 1 | while read d; do 
+find "$main_dir" -type d -maxdepth 1 | while read d; do 
     rm -fr $d
 done
 
