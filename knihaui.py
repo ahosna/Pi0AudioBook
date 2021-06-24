@@ -3,6 +3,8 @@ from gpiozero import Button, Device
 from time import sleep
 from mpd import MPDClient
 from contextlib import contextmanager
+import alsaaudio
+import evdev
 import os
 import logging
 import sys
@@ -10,12 +12,14 @@ import time
 
 DATA_DIR = "/data"
 
-BTN_PLAY = 10
-BTN_PREV = 9
-BTN_NEXT = 11
+BTN_PLAY = 6
+BTN_PREV = 13
+BTN_NEXT = 5
+
+ROTARY_INPUT = "/dev/input/event1" 
 
 BOUNCE_TIME = None
-HOLD_TIME = 1.0
+HOLD_TIME = 1.5
 
 RADIOS = [
     ".news.mp3",
@@ -232,6 +236,32 @@ def process_direct_command(cmd):
     btn.drive_high()
 
 
+def change_volume(mixer, diff, multi=3):
+    x = mixer.getvolume(alsaaudio.PCM_PLAYBACK)
+    v = x[0] + (diff * multi) # use only the first channel
+    if v<0: 
+        v=0
+    if v>100:
+        v=100
+    logging.info("Set volume to %s", v)
+    r = mixer.setvolume(v, alsaaudio.MIXER_CHANNEL_ALL)
+
+
+def eventloop():
+    mixer = alsaaudio.Mixer("PCM", 0, 0)
+    logging.info("Mixer: %s", mixer)
+
+    device = evdev.InputDevice(ROTARY_INPUT)
+    logging.info("Input: %s", device)
+
+    for event in device.read_loop():
+        logging.info("Event: %s", event)
+        if event.type == 2:
+            diff = int(event.value)
+            change_volume(mixer, diff)
+
+
+
 def main(dev=False):
     logging.basicConfig(level=logging.DEBUG if dev else logging.INFO)
 
@@ -247,8 +277,7 @@ def main(dev=False):
         for line in sys.stdin:
             process_direct_command(line.strip())
     else:
-        while True:
-            sleep(1)
+	    eventloop()
 
     logging.info("Wrap up")
 

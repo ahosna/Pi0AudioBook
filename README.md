@@ -1,7 +1,7 @@
-# PI Zero W Audio Book
+# Raspberry based Audio Book (Pi ZeroW or 3B)
 ## Motivation and requirements
 My dad is practically blind and at 80 years has trouble hearing and operating tiny or more complicated electronics controls. Touch screens, smart phones, keyboards, and small mp3 players are completely out of the picture. I have tried using small dummy MP3 player (Sencor) with 5 buttons (prev, next, play|pause, volume up/down) as an initial assessment whether audio book player is something he would be able to control. Even though he uesd it, he was struggling with controlling it and the small player with 2-3x overloaded button controlls was too much. Also it lacked a fundamental option of remote book update. So I've decided to build custom player with following requirements:
-- volume control is an analog knob (ideally it turns off all the way to the left)
+- volume control is an incremental rotary encoder
 - keep the number of buttons to minimum (spaced far apart - resilient to random touch)
 - allow remote content change - wifi
 - open content (not locked to a publisher)
@@ -10,19 +10,64 @@ My dad is practically blind and at 80 years has trouble hearing and operating ti
 - sufficient output volume to drive speakers/headphones
 
 ## Install
-### Dependencie
+### System
+run raspi-config and set the system up
+Install some system packages.
+```
+sudo apt-get install python3 evtest mpd mpc ntp vim screen git gpio
+```
+
+Create data dir
+```
+mkdir /data && chown pi /data && chmod 755 /data
+```
+
+Edit /etc/mpd.conf and change directory to /data
+
+Set the rotary encoder overlay and disable Bluetooth and onboard audio adding to /boot/config.txt
+```
+# add rotarty encoder
+dtoverlay=rotary-encoder,pin_a=19,pin_b=26,relative_axis=1
+
+# disable builtin audio - we are using external usb card
+dtparam=audio=off
+
+# disable BT
+dtoverlay=disable-bt
+```
+
+Crontab under user to fetch into /data/.news.mp3
+```
+crontab -e 
+55 * * * /usr/bin/curl -s -o /data/.news.mp3 http://www.adino.sk/dl/news.mp3
+```
+
+### Dependencies
 Use venv for managing dependencies
+```
+sudo apt-get install python3-venv
+```
+
 ```
 python3 -mvenv env
 activate env with `source env/bin/activate`
 pip3 install gpiozero
 pip3 install python-mpd2
+pip3 install evdev
+pip3 install pyalsaaudio
 pip3 install google-cloud-texttospeech
+```
 
+Service setup
+```
+sudo cp *.service /etc/system.d/system # or create symlinks
+sudo systemctl daemon-reload
+sudo systemctl enable wifi-restart
+sudo systemctl enable knihaui
 ```
 
 ### knihaui.py
-* User pi on Raspberry PI Zero has this repo checked out under knihaui folder.
+* User pi on Raspberry PI Zero has this repo checked out under Pi0AudioBook folder.
 * There is also folder `/data` on the root writable by pi user. 
 * `/etc/rc.local` is modified to disable video output, set PCM volume to 100, set IO pins and set permissions on `/data`
 * We have `wifi_restart.sh` and related service definition to automatically ping and restart wifi.

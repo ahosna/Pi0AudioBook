@@ -5,7 +5,7 @@ After=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/home/pi/knihaui/wifi_restart.sh
+ExecStart=/home/pi/Pi0AudioBook/wifi_restart.sh
 TimeoutStartSec=30
 RemainAfterExit=yes
 
