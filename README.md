@@ -39,7 +39,7 @@ dtoverlay=disable-bt
 Crontab under user to fetch into /data/.news.mp3
 ```
 crontab -e 
-55 * * * /usr/bin/curl -s -o /data/.news.mp3 http://www.adino.sk/dl/news.mp3
+55 * * * * /usr/bin/curl -s -o /data/.news.mp3 http://www.adino.sk/dl/news.mp3
 ```
 
 ### Dependencies
@@ -101,17 +101,30 @@ V1 is the physical build with buttons that my dad is using right now.
 - [x] Add doc of system modification of raspbian to this doc
 
 ## V2
-- [ ] HW: Add serial port output to external connector for improved troubleshooting 
-- [ ] HW: Replace potentiometer with rotary encoder and set master volume directly using Alsa
-- [ ] HW: Add rocker switch with indicator to allow turn off/on and immediate powered-on indication
-- [ ] OS: Serial console
-- [ ] SW: rotary switch volume control
+- [x] HW: Replace potentiometer with rotary encoder and set master volume directly using Alsa
+- [x] HW: Use bigger case - and use Raspberry PI 3B - better wifi stability
+- [x] SW: Rotary switch volume control
 - [x] SW: user request to have information about the day available as another station
 - [x] OS: read-only mount mode to prolong SD card lifetime
+
+## V3
+- [ ] HW: Replace buttons for a better quality ones
+- [ ] HW: Add 5V fan to manage temperature better
+- [ ] HW: Add serial port output to external connector for improved troubleshooting 
+- [ ] HW: Add rocker switch with indicator to allow turn off/on and immediate powered-on indication
+- [ ] HW: Wire rotary selector push button for extended functionality
+- [ ] SW: Use dtoverlay for button processing - works well for rotary and simplify event processing
+- [ ] OS: Serial console
 
 ## Schematic
 ![Schematic](schematic.png)
 
 ## Photos
+### V1
 ![Top](Pi0AudioBook-top.jpg)
 ![Inside](Pi0AudioBook-inside.jpg)
+
+### V2
+![Top](V2Top.jpg)
+![Inside](V2Inside.jpg)
+
