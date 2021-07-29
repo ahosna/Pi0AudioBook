@@ -42,6 +42,31 @@ crontab -e
 55 * * * * /usr/bin/curl -s -o /data/.news.mp3 http://www.adino.sk/dl/news.mp3
 ```
 
+#### Flash hardening
+Due to the system using flash, it might happen that the SD card eventually wears out. There are couple of things we can do to prevent this.
+Disable swap and frequent writers.
+```
+systemctl disable dphys-swapfile
+swapoff -a
+apt-get remove --purge wolfram-engine triggerhappy anacron logrotate dphys-swapfile xserver-common lightdm
+apt-get autoremove --purge
+```
+
+Edit `/etc/mpd.conf` and make `log_file` log to `/var/lib/mpd` rather than `/var/log/mpd`.
+```
+log_file /var/lib/mpd/mpd.log"
+```
+
+Modify `/etc/fstab` and add:
+```
+tmpfs    /tmp    tmpfs    defaults,noatime,nosuid,size=100m    0 0
+tmpfs    /var/tmp    tmpfs    defaults,noatime,nosuid,size=30m    0 0
+tmpfs    /var/lib/mpd    tmpfs    defaults,noatime,nosuid,size=30m    0 0
+tmpfs    /var/log    tmpfs    defaults,noatime,nosuid,mode=0755,size=100m    0 0
+
+```
+`/var/log` is optional. It should not be very busy with mpd now logging to /var/lib/mpd. Use `iotop -o -b -d 10` to check what is writing to the flash.
+
 ### Dependencies
 Use venv for managing dependencies
 ```
