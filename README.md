@@ -46,11 +46,11 @@ crontab -e
 Due to the system using flash, it might happen that the SD card eventually wears out. There are couple of things we can do to prevent this.
 Disable swap and frequent writers.
 ```
-systemctl disable dphys-swapfile
-swapoff -a
-apt-get remove --purge wolfram-engine triggerhappy anacron logrotate dphys-swapfile xserver-common lightdm
+apt-get remove --purge wolfram-engine triggerhappy anacron logrotate xserver-common lightdm
 apt-get autoremove --purge
 ```
+Edit `/etc/dphys-swapfile` and set `CONF_SWAPSIZE=0`
+Verify with `free`, swap should be 0.
 
 Edit `/etc/mpd.conf` and make `log_file` log to `/var/lib/mpd` rather than `/var/log/mpd`.
 ```
