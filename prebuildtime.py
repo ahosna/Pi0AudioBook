@@ -11,8 +11,10 @@ def wrap_in_p(lines):
 
 def hodiny(n):
     if n == 1: 
-        return f"{n} hodina"
-    elif n in (2,3,4,):
+        return f"jedna hodina"
+    if n == 2:
+        return f"dve hodiny"
+    elif n in (3,4,):
         return f"{n} hodiny"
     else:
         return f"{n} hodín"
@@ -20,8 +22,10 @@ def hodiny(n):
 
 def minuty(n):
     if n == 1: 
-        return f"{n} minúta"
-    elif n in (2,3,4,):
+        return f"jedna minúta"
+    if n == 2:
+        return f"dve minúty"
+    elif n in (3,4,):
         return f"{n} minúty"
     else:
         return f"{n} minút"
