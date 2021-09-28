@@ -5,7 +5,7 @@ After=mpd.service
 
 [Service]
 Type=simple
-ExecStart=/home/pi/knihaui/knihaui.sh
+ExecStart=/home/pi/Pi0AudioBook/knihaui.sh
 Restart=always
 User=pi
 RestartSec=5

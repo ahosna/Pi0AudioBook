@@ -13,7 +13,7 @@ while /bin/sleep $INTERVAL; do
         /sbin/ifdown $INTERFACE
         /bin/sleep 5
         /sbin/ifup $INTERFACE
-	/usr/bin/logger "Restart complete"
+	    /usr/bin/logger "Restart complete"
     else
         /usr/bin/logger "Router is pingable. Everything is fine."
     fi
