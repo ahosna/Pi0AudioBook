@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NEWS_FILE="/data/.news.mp3"
-ANNOUNCER_FILE="/tmp/.anziko.mp3"
+ANNOUNCER_FILE="/data/tmp/.anziko.mp3"
 
 if [ ! -f $NEWS_FILE ]; then
     exit 0
