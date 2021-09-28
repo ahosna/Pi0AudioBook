@@ -9,6 +9,23 @@ def wrap_in_p(lines):
     return ["<p>{}</p>".format(l) for l in lines]
 
 
+def hodiny(n):
+    if n == 1: 
+        return f"{n} hodina"
+    elif n in (2,3,4,):
+        return f"{n} hodiny"
+    else:
+        return f"{n} hodín"
+
+
+def minuty(n):
+    if n == 1: 
+        return f"{n} minúta"
+    elif n in (2,3,4,):
+        return f"{n} minúty"
+    else:
+        return f"{n} minút"
+
 
 def gen_time(hours, minutes):
     logging.info("Calling google API")
@@ -26,7 +43,7 @@ def gen_time(hours, minutes):
         )
         ssml = (
             "<speak>"
-            + "<p>Práve je {} hodín a {} minút</p>".format(hours, minutes)
+            + "<p>Práve je {} a {}.</p>".format(hodiny(hours), minuty(minutes))
             + "</speak>"
         )
 
