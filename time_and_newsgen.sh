@@ -8,5 +8,5 @@ if [ ! -f $NEWS_FILE ]; then
 fi
 
 tf=`date +times/%0Hh-%0Mm.mp3`
-ffmpeg -i "concat:$tf|$NEWS_FILE" -c copy $ANNOUNCER_FILE
+ffmpeg -y -i "concat:$tf|$NEWS_FILE" -c copy $ANNOUNCER_FILE
 exit 0
