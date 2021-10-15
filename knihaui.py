@@ -18,7 +18,7 @@ BTN_NEXT = 5
 
 ROTARY_INPUT = "/dev/input/event1" 
 
-BOUNCE_TIME = None
+BOUNCE_TIME = 0.05
 HOLD_TIME = 1.5
 
 RADIOS = [
