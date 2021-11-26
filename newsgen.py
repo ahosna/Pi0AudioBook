@@ -9,7 +9,7 @@ from google.cloud import texttospeech
 
 SK_FORECAST_URL = "http://www.shmu.sk/sk/?page=1&id=meteo_tpredpoved_ba"
 FAILED_FORECAST = ["Nepodarilo sa stiahnuť predpoveď počasia."]
-EXTRACT_REGEX = re.compile(r".*(<h3[^>]*>(Predpove(.*?))</h3>(.*?)</p>).*")
+EXTRACT_REGEX = re.compile(r".*(<h2[^>]*>(Predpove(.*?))</h2>(.*?)</p>).*")
 CLEANUP_REGEX = re.compile(r"<.[^>]*>")
 
 MONTHS = [
