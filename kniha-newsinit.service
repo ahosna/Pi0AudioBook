@@ -1,0 +1,14 @@
+[Unit]
+Description=Copy dummy news file to ramdisk
+Requires=data-tmp.mount
+After=data-tmp.mount
+
+[Service]
+User=pi
+Type=oneshot
+ExecStart=/bin/bash /home/pi/Pi0AudioBook/time_and_newsgen.sh
+TimeoutStartSec=30
+RemainAfterExit=no
+
+[Install]
+WantedBy=knihaui.service

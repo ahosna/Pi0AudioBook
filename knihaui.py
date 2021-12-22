@@ -18,7 +18,7 @@ BTN_NEXT = 5
 
 ROTARY_INPUT = "/dev/input/event1" 
 
-BOUNCE_TIME = 0.05
+BOUNCE_TIME = 0
 HOLD_TIME = 1.5
 
 RADIOS = [
@@ -208,6 +208,7 @@ def setup_radio():
         mpd.single(1)
         for r in RADIOS:
             try: 
+                logging.info(f"Adding radio {r}")
                 mpd.add(r)
             except Exception as e:
                 logging.exception(e)
