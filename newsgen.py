@@ -5,12 +5,11 @@ import logging
 import re
 import urllib.request
 from google.cloud import texttospeech
+from bs4 import BeautifulSoup as Soup
 
 
 SK_FORECAST_URL = "http://www.shmu.sk/sk/?page=1&id=meteo_tpredpoved_ba"
 FAILED_FORECAST = ["Nepodarilo sa stiahnuť predpoveď počasia."]
-EXTRACT_REGEX = re.compile(r".*(<h[23][^>]*>(Predpove(.*?))</h[23]>(.*?)</p>).*")
-CLEANUP_REGEX = re.compile(r"<.[^>]*>")
 
 MONTHS = [
     None,
@@ -40,18 +39,30 @@ def get_sk_forecast():
         if resp.code != 200:
             raise RuntimeError("Response code not 200")
         text = resp.read().decode("utf8")
-        text = text.replace("\r", "")
+        logging.info(f"Downloaded {len(text)} bytes of html")
+        soup = Soup(text, 'html.parser')
+        forecast_hdr = soup.find(
+            name=["h2", "h3"],
+            string=re.compile("Predpoveď\s*počasia\s*na\s*")
+        )
+        logging.info(f"Found {forecast_hdr}")
+        if forecast_hdr is None:
+            raise RuntimeError("Forecast header not found")
+
+        forecast_body = forecast_hdr.find_next_sibling(name="p")
+        if forecast_body is None:
+            raise RuntimeError("Forecast body not found")
+
+        logging.info(f"Raw forecast body:{forecast_body}")
+        text = forecast_body.get_text().replace("\r", "")
         text = text.replace("\n", "")
-        match = EXTRACT_REGEX.match(text)
-
-        if not match:
-            raise RuntimeError("Failed to parse forecast")
-
-        head = match.group(2)
-        text = CLEANUP_REGEX.sub("", match.group(4), 0)
+        logging.info(f"Cleaned forecast body:{text}")
         return list(
             map(
-                str.strip, [head, *["{}.".format(l) for l in text.split(".") if len(l)]]
+                str.strip, [
+                    forecast_hdr.get_text(), 
+                    *["{}.".format(l) for l in text.split(".") if len(l)]
+                ]
             )
         )
     except Exception as e:

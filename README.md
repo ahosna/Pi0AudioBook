@@ -81,6 +81,7 @@ pip3 install python-mpd2
 pip3 install evdev
 pip3 install pyalsaaudio
 pip3 install google-cloud-texttospeech
+pip3 install beauitifulsoup4
 ```
 
 Service setup
