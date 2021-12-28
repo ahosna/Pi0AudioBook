@@ -4,6 +4,7 @@ import json
 import logging
 import re
 import urllib.request
+import sys
 from google.cloud import texttospeech
 from bs4 import BeautifulSoup as Soup
 
@@ -107,17 +108,14 @@ def get_sk_date_and_name():
     return [dnes, meniny_txt]
 
 
-def build_ssml():
-    ssml = (
-        "<speak>"
-        + "".join(wrap_in_p(get_sk_date_and_name() + get_sk_forecast()))
-        + "</speak>"
-    )
+def build_ssml(body=None):
+    body = body or "".join(wrap_in_p(get_sk_date_and_name() + get_sk_forecast()))
+    ssml = "<speak>{}</speak>".format(body)
     logging.info("SSML: %s", ssml)
     return ssml
 
 
-def prepare_news_file():
+def prepare_news_file(ssml):
     logging.info("Calling google API")
     try:
         client = texttospeech.TextToSpeechClient()
@@ -132,7 +130,7 @@ def prepare_news_file():
             pitch=-1.0,
         )
 
-        synthesis_input = texttospeech.SynthesisInput(ssml=build_ssml())
+        synthesis_input = texttospeech.SynthesisInput(ssml=ssml)
 
         response = client.synthesize_speech(
             input=synthesis_input, voice=voice, audio_config=audio_config
@@ -149,5 +147,10 @@ def prepare_news_file():
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    #print(build_ssml())
-    prepare_news_file()
+    if len(sys.argv) > 1: 
+        body = " ".join(sys.argv[1:])
+        logging.info("Using custom text: '%s'", body)
+    else:
+        body = None
+    ssml = build_ssml(body)
+    prepare_news_file(ssml)
