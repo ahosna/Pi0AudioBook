@@ -1,7 +1,7 @@
 [Unit]
 Description=Run UI for reader
-Requires=mpd.service network-online.target
-After=mpd.service
+Requires=mpd.service pigpiod.service network-online.target
+After=mpd.service pigpiod.service network-online.target
 
 [Service]
 Type=simple
@@ -10,6 +10,7 @@ Restart=always
 User=pi
 RestartSec=5
 TimeoutStartSec=30
+Nice=-19
 
 [Install]
 WantedBy=multi-user.target

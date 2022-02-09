@@ -41,10 +41,9 @@ def get_sk_forecast():
             raise RuntimeError("Response code not 200")
         text = resp.read().decode("utf8")
         logging.info(f"Downloaded {len(text)} bytes of html")
-        soup = Soup(text, 'html.parser')
+        soup = Soup(text, "html.parser")
         forecast_hdr = soup.find(
-            name=["h2", "h3"],
-            string=re.compile("Predpoveď\s*počasia\s*na\s*")
+            name=["h2", "h3"], string=re.compile("Predpoveď\s*počasia\s*na\s*")
         )
         logging.info(f"Found {forecast_hdr}")
         if forecast_hdr is None:
@@ -60,10 +59,11 @@ def get_sk_forecast():
         logging.info(f"Cleaned forecast body:{text}")
         return list(
             map(
-                str.strip, [
-                    forecast_hdr.get_text(), 
-                    *["{}.".format(l) for l in text.split(".") if len(l)]
-                ]
+                str.strip,
+                [
+                    forecast_hdr.get_text(),
+                    *["{}.".format(l) for l in text.split(".") if len(l)],
+                ],
             )
         )
     except Exception as e:
@@ -147,7 +147,7 @@ def prepare_news_file(ssml):
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    if len(sys.argv) > 1: 
+    if len(sys.argv) > 1:
         body = " ".join(sys.argv[1:])
         logging.info("Using custom text: '%s'", body)
     else:
