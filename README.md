@@ -14,7 +14,7 @@ My dad is practically blind and at 80 years has trouble hearing and operating ti
 run raspi-config and set the system up
 Install some system packages.
 ```
-sudo apt-get install python3 evtest mpd mpc ntp vim screen git gpio
+sudo apt-get install python3 evtest mpd mpc ntp vim screen git gpio libasound2-dev
 ```
 
 Create data dir
@@ -80,8 +80,9 @@ pip3 install gpiozero
 pip3 install python-mpd2
 pip3 install evdev
 pip3 install pyalsaaudio
+pip3 install --upgrade google-api-python-client
 pip3 install google-cloud-texttospeech
-pip3 install beauitifulsoup4
+pip3 install beautifulsoup4
 ```
 
 Service setup

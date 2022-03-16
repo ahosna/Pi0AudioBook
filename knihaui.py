@@ -34,6 +34,7 @@ RADIOS = [
     "https://icecast.stv.livebox.sk/slovensko_128.mp3",
     # "http://live.slovakradio.sk:8000/Litera_128.mp3",
     "https://icecast.stv.livebox.sk/litera_128.mp3",
+    "tmp/.zurnal.mp3",
 ]
 
 
