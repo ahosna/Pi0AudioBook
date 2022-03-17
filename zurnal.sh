@@ -10,4 +10,6 @@ if [ $H -ge 18 ] || [ $H -le 6 ]; then
 else
     curl -so $OUTPUT_TMP "$URL_RANO"
 fi
+chmod a+r $OUTPUT_TMP
 mv $OUTPUT_TMP $OUTPUT_FINAL
+exit 0

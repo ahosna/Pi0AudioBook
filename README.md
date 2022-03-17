@@ -39,7 +39,9 @@ dtoverlay=disable-bt
 Crontab under user to fetch into /data/.news.mp3
 ```
 crontab -e 
-55 * * * * /usr/bin/curl -s -o /data/.news.mp3 http://www.adino.sk/dl/news.mp3
+*/5 * * * * /usr/bin/curl -f -s -o /data/tmp/.news.mp3 http://www.uid0.sk/users/adino/dl/news.mp3
+* * * * * /home/pi/Pi0AudioBook/time_and_newsgen.sh > /dev/null 2>&1
+0 8,9,19,20 * * * /home/pi/Pi0AudioBook/zurnal.sh > /dev/null 2>&1
 ```
 
 #### Flash hardening
