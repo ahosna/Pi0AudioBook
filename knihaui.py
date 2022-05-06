@@ -55,7 +55,7 @@ def mpd_client():
     global state
     try:
         client = MPDClient()
-        client.connect("127.0.0.1", 6600)
+        client.connect("::", 6600, 1)
         yield client
     finally:
         client.close()
