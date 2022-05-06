@@ -11,7 +11,8 @@ for id in ${IDS[@]}; do
     fi
     # hackery to get the timestamp from pubDate and get latest
     d=${data#* }
-    ts=`date -j -f '%a, %d %b %Y %H:%M:%S %z' "$d" '+%s' 2>/dev/null`
+    #ts=`date -j -f '%a, %d %b %Y %H:%M:%S %z' "$d" '+%s' 2>/dev/null` macos version
+    ts=`date -d "$d" '+%s'`
     echo $ts ${data%% *}
 done | sort -nrk 1 | head -1 | cut -d " " -f 2| while read URL_LATEST; do
     LATEST_DOWNLOADED_FILE=/data/tmp/.latest_zurnal
