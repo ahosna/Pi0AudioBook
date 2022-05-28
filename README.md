@@ -1,6 +1,6 @@
 # Raspberry based Audio Book (Pi ZeroW or 3B)
 ## Motivation and requirements
-My dad is practically blind and at 80 years has trouble hearing and operating tiny or more complicated electronics controls. Touch screens, smart phones, keyboards, and small mp3 players are completely out of the picture. I have tried using small dummy MP3 player (Sencor) with 5 buttons (prev, next, play|pause, volume up/down) as an initial assessment whether audio book player is something he would be able to control. Even though he uesd it, he was struggling with controlling it and the small player with 2-3x overloaded button controlls was too much. Also it lacked a fundamental option of remote book update. So I've decided to build custom player with following requirements:
+My dad is practically blind and at 80 years has trouble hearing and operating tiny or more complicated electronics controls. Touch screens, smart phones, keyboards, and small mp3 players are completely out of the picture. I have tried using small dummy MP3 player (Sencor) with 5 buttons (prev, next, play|pause, volume up/down) as an initial assessment whether audio book player is something he would be able to control. Even though he used it, he was struggling with controlling it and the small player with 2-3x overloaded button controlls was too much. Also it lacked a fundamental option of remote book update. So I've decided to build custom player with following requirements:
 - volume control is an incremental rotary encoder
 - keep the number of buttons to minimum (spaced far apart - resilient to random touch)
 - allow remote content change - wifi
@@ -14,7 +14,7 @@ My dad is practically blind and at 80 years has trouble hearing and operating ti
 run raspi-config and set the system up
 Install some system packages.
 ```
-sudo apt-get install python3 evtest mpd mpc ntp vim screen git gpio libasound2-dev
+sudo apt-get install python3 evtest mpd mpc ntp vim screen git gpio pigpiod libasound2-dev
 ```
 
 Create data dir
