@@ -250,7 +250,7 @@ def setup_radio():
 
 def setup_mixer():
     global state
-    state.mixer = alsaaudio.Mixer("PCM", 0, 0)
+    state.mixer = alsaaudio.Mixer("PCM", 0, 1)
     logging.info("Mixer: %s", state.mixer)
 
 
