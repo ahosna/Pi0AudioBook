@@ -249,6 +249,8 @@ def setup_radio():
 
 
 def setup_mixer():
+    mixers = alsaaudio.mixers(cardindex=1)
+    logging.info("Available mixers: %s", mixers)
     global state
     state.mixer = alsaaudio.Mixer("PCM", 0, 1)
     logging.info("Mixer: %s", state.mixer)
@@ -283,7 +285,7 @@ def change_volume(mixer, diff, multi=3):
     if v > 100:
         v = 100
     logging.info("Set volume to %s on diff:%d based off: %d", v, diff, x[0])
-    r = mixer.setvolume(v, alsaaudio.MIXER_CHANNEL_ALL)
+    r = mixer.setvolume(v)
 
 
 def eventloop():
