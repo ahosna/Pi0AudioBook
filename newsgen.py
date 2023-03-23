@@ -57,6 +57,7 @@ def get_sk_forecast():
         logging.info(f"Raw forecast body:{forecast_body}")
         text = forecast_body.get_text().replace("\r", "")
         text = text.replace("\n", "")
+        text = text.replace(" st.", " °.")  # .st je skratka pre stupne.
         logging.info(f"Cleaned forecast body:{text}")
         return list(
             map(
