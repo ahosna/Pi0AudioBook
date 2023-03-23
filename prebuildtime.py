@@ -10,22 +10,28 @@ def wrap_in_p(lines):
 
 
 def hodiny(n):
-    if n == 1: 
+    if n == 1:
         return f"jedna hodina"
     if n == 2:
         return f"dve hodiny"
-    elif n in (3,4,):
+    elif n in (
+        3,
+        4,
+    ):
         return f"{n} hodiny"
     else:
         return f"{n} hodín"
 
 
 def minuty(n):
-    if n == 1: 
+    if n == 1:
         return f"jedna minúta"
     if n == 2:
         return f"dve minúty"
-    elif n in (3,4,):
+    elif n in (
+        3,
+        4,
+    ):
         return f"{n} minúty"
     else:
         return f"{n} minút"
@@ -57,7 +63,10 @@ def gen_time(hours, minutes):
             input=synthesis_input, voice=voice, audio_config=audio_config
         )
 
-        filename = "times/%02dh-%02dm.mp3" % (hours, minutes, )
+        filename = "times/%02dh-%02dm.mp3" % (
+            hours,
+            minutes,
+        )
         logging.info(f"Filename: {filename}")
         with open(filename, "wb") as out:
             out.write(response.audio_content)

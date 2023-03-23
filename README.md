@@ -1,6 +1,6 @@
 # Raspberry based Audio Book (Pi ZeroW or 3B)
 ## Motivation and requirements
-My dad is practically blind and at 80 years has trouble hearing and operating tiny or more complicated electronics controls. Touch screens, smart phones, keyboards, and small mp3 players are completely out of the picture. I have tried using small dummy MP3 player (Sencor) with 5 buttons (prev, next, play|pause, volume up/down) as an initial assessment whether audio book player is something he would be able to control. Even though he uesd it, he was struggling with controlling it and the small player with 2-3x overloaded button controlls was too much. Also it lacked a fundamental option of remote book update. So I've decided to build custom player with following requirements:
+My dad is practically blind and at 80 years has trouble hearing and operating tiny or more complicated electronics controls. Touch screens, smart phones, keyboards, and small mp3 players are completely out of the picture. I have tried using small dummy MP3 player (Sencor) with 5 buttons (prev, next, play|pause, volume up/down) as an initial assessment whether audio book player is something he would be able to control. Even though he used it, he was struggling with controlling it and the small player with 2-3x overloaded button controlls was too much. Also it lacked a fundamental option of remote book update. So I've decided to build custom player with following requirements:
 - volume control is an incremental rotary encoder
 - keep the number of buttons to minimum (spaced far apart - resilient to random touch)
 - allow remote content change - wifi
@@ -14,19 +14,28 @@ My dad is practically blind and at 80 years has trouble hearing and operating ti
 run raspi-config and set the system up
 Install some system packages.
 ```
-sudo apt-get install python3 evtest mpd mpc ntp vim screen git gpio
+sudo apt-get install python3 evtest mpd mpc ntp vim screen git pigpiod libasound2-dev ffmpeg
 ```
 
 Create data dir
 ```
-mkdir /data && chown pi /data && chmod 755 /data
+sudo mkdir /data && sudo chown pi /data && chmod 755 /data
 ```
 
 Edit /etc/mpd.conf and change directory to /data
+`music_directory         "/data"`
+Add audio device definition
+```
+audio_output {
+        type            "alsa" 
+        name            "My ALSA Device" 
+        device          "hw:1,0"        # optional 
+}
+```
 
 Set the rotary encoder overlay and disable Bluetooth and onboard audio adding to /boot/config.txt
 ```
-# add rotarty encoder
+# add rotary encoder
 dtoverlay=rotary-encoder,pin_a=19,pin_b=26,relative_axis=1
 
 # disable builtin audio - we are using external usb card
@@ -34,12 +43,35 @@ dtparam=audio=off
 
 # disable BT
 dtoverlay=disable-bt
+
+# Disable arm boost
+arm_boost=0
+
+# Disable vc4-kms-v3d audio
+dtoverlay=vc4-kms-v3d,audio=off
+```
+### Alsa USB sound card
+Edit /usr/share/alsa/alsa.conf
+```
+defaults.ctl.card 1
+defaults.pcm.card 1
+```
+
+### Static address
+Set static address and resolvers in `/etc/dhcpcd.conf`
+```
+interface wlan0
+static ip_address=192.168.1.30/24
+static routers=192.168.1.1
+static domain_name_servers=192.168.1.1 8.8.8.8
 ```
 
 Crontab under user to fetch into /data/.news.mp3
 ```
 crontab -e 
-55 * * * * /usr/bin/curl -s -o /data/.news.mp3 http://www.adino.sk/dl/news.mp3
+*/5 * * * * /usr/bin/curl -f -s -o /data/tmp/.news.mp3 http://www.uid0.sk/users/adino/dl/news.mp3
+* * * * * /home/pi/Pi0AudioBook/time_and_newsgen.sh > /dev/null 2>&1
+*/5 * * * /home/pi/Pi0AudioBook/zurnal.sh > /dev/null 2>&1
 ```
 
 #### Flash hardening
@@ -56,6 +88,15 @@ Edit `/etc/mpd.conf` and make `log_file` log to `/var/lib/mpd` rather than `/var
 ```
 log_file /var/lib/mpd/mpd.log"
 ```
+In mpd.conf add entry for audio card:
+```
+audio_output {
+     type            "alsa"
+     name            "My ALSA Device"
+     device          "hw:1,0"        # optional
+}
+
+```
 
 Modify `/etc/fstab` and add:
 ```
@@ -63,9 +104,17 @@ tmpfs    /tmp    tmpfs    defaults,noatime,nosuid,size=100m    0 0
 tmpfs    /var/tmp    tmpfs    defaults,noatime,nosuid,size=30m    0 0
 tmpfs    /var/lib/mpd    tmpfs    defaults,noatime,nosuid,size=30m    0 0
 tmpfs    /var/log    tmpfs    defaults,noatime,nosuid,mode=0755,size=100m    0 0
+tmpfs    /data/tmp    tmpfs    defaults,noatime,nosuid,mode=0777,size=100m    0 0
 
 ```
 `/var/log` is optional. It should not be very busy with mpd now logging to /var/lib/mpd. Use `iotop -o -b -d 10` to check what is writing to the flash.
+
+### bash helper
+Add `~/.bash_aliases` with two helpers:
+```
+alias knihaeject='sudo service mpd stop; sudo service knihaui stop; rm -fr /data/*.mp3'
+alias knihaload='sudo service mpd start && sudo service knihaui start'
+```
 
 ### Dependencies
 Use venv for managing dependencies
@@ -77,11 +126,13 @@ sudo apt-get install python3-venv
 python3 -mvenv env
 activate env with `source env/bin/activate`
 pip3 install gpiozero
+pip3 install pigpio
 pip3 install python-mpd2
 pip3 install evdev
 pip3 install pyalsaaudio
+pip3 install --upgrade google-api-python-client
 pip3 install google-cloud-texttospeech
-pip3 install beauitifulsoup4
+pip3 install beautifulsoup4
 ```
 
 Service setup
@@ -90,12 +141,14 @@ sudo cp *.service /etc/system.d/system # or create symlinks
 sudo systemctl daemon-reload
 sudo systemctl enable wifi-restart
 sudo systemctl enable knihaui
+systemctl enable kniha-newsinit.service
 ```
 
 ### knihaui.py
 * User pi on Raspberry PI Zero has this repo checked out under Pi0AudioBook folder.
 * There is also folder `/data` on the root writable by pi user. 
 * `/etc/rc.local` is modified to disable video output, set PCM volume to 100, set IO pins and set permissions on `/data`
+  `source /home/pi/Pi0AudioBook/knihaui-init.sh`
 * We have `wifi_restart.sh` and related service definition to automatically ping and restart wifi.
 * `/etc/systemd/system/knihaui.service` takes care of running the UI.
 * Service is enabled with `systemctl enable knihaui`. 

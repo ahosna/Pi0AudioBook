@@ -1,11 +1,16 @@
 #!/bin/bash
 
 ## include in /etc/rc.local with . /home/pi/Pi0AudioBook/knihaui-init.sh
+echo "In knihaui-init.sh"
+
+# set wifi to low power
+/sbin/iwconfig wlan0 power off
 
 # disable HDMI output
-/usr/bin/tvservice -o
+# /usr/bin/tvservice -o
+
 # Set volume to full blast
-/usr/bin/amixer -c0 sset 'PCM' '100%'
+/usr/bin/amixer -c 1 sset 'PCM' '100%'
 
 # set permissions on /data do that mpd can read
 /bin/chmod -R a+x /data
