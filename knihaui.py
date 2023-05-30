@@ -277,14 +277,17 @@ def process_direct_command(cmd):
     btn.drive_high()
 
 
-def change_volume(mixer, diff, multi=3):
+def change_volume(mixer, diff, step=3, lowest=50, highest=100):
     x = mixer.getvolume(alsaaudio.PCM_PLAYBACK)
-    v = x[0] + (diff * multi)  # use only the first channel
-    if v < 0:
-        v = 0
-    if v > 100:
-        v = 100
-    logging.info("Set volume to %s on diff:%d based off: %d", v, diff, x[0])
+    v = x[0] + (diff * step)  # use only the first channel
+    if v < lowest:
+        v = lowest
+    if v > highest:
+        v = highest
+    logging.info(
+        "%s volume %d -> %d to %s", 
+        "Increase" if diff>0 else "Decrease", x[0], v
+    )
     r = mixer.setvolume(v)
 
 
