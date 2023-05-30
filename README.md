@@ -109,6 +109,13 @@ tmpfs    /data/tmp    tmpfs    defaults,noatime,nosuid,mode=0777,size=100m    0 
 ```
 `/var/log` is optional. It should not be very busy with mpd now logging to /var/lib/mpd. Use `iotop -o -b -d 10` to check what is writing to the flash.
 
+### bash helper
+Add `~/.bash_aliases` with two helpers:
+```
+alias knihaeject='sudo service mpd stop; sudo service knihaui stop; rm -fr /data/*.mp3'
+alias knihaload='sudo service mpd start && sudo service knihaui start'
+```
+
 ### Dependencies
 Use venv for managing dependencies
 ```
