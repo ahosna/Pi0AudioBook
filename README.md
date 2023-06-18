@@ -69,7 +69,7 @@ static domain_name_servers=192.168.1.1 8.8.8.8
 Crontab under user to fetch into /data/.news.mp3
 ```
 crontab -e 
-*/5 * * * * /usr/bin/curl -f -s -o /data/tmp/.news.mp3 http://www.uid0.sk/users/adino/dl/news.mp3
+*/5 * * * * /usr/bin/curl -L -f -s -o /data/tmp/.news.mp3 https://www.uid0.sk/users/adino/dl/news.mp3
 * * * * * /home/pi/Pi0AudioBook/time_and_newsgen.sh > /dev/null 2>&1
 */5 * * * /home/pi/Pi0AudioBook/zurnal.sh > /dev/null 2>&1
 ```
